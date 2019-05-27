@@ -2,6 +2,7 @@ package creational_test
 
 import (
 	"testing"
+
 )
 
 func TestGetInstance(t *testing.T) {

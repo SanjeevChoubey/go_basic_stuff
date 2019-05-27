@@ -1,0 +1,37 @@
+{
+    "folders": [
+        {
+            "path": "C:\\goweb\\http"
+        },
+        {
+            "path": "C:\\goweb\\map"
+        },
+        {
+            "path": "C:\\goweb\\pkg"
+        },
+        {
+            "path": "C:\\goweb\\sqlconnect"
+        },
+        {
+            "path": "C:\\goweb\\src"
+        },
+        {
+            "path": "C:\\goweb\\structs"
+        },
+        {
+            "path": "C:\\goweb\\webdevelopment"
+        },
+        {
+            "path": "C:\\goweb\\MongoDb_Go"
+        },
+        {
+            "path": "C:\\goweb\\RESTapi"
+        },
+        {
+            "path": "C:\\goweb\\docker_go"
+        },
+        {
+            "path": "C:\\goweb\\go_design_patterns"
+        }
+    ]
+}

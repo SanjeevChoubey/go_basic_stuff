@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang ="en">
+
+<head>
+<meta charset ="UTF-8">
+<title> Hello</title>
+</head>
+<body>
+<ul>
+{{range .Cntry}}
+<li>{{.Country}} - {{.Capital}}</li>
+{{end}}
+</ul>
+
+<ul>
+{{range .Game}}
+<li>{{.Player}} - {{.Strength}}</li>
+{{end}}
+</ul>
+
+</body>
+
+</html>

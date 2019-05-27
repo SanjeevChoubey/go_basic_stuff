@@ -2,6 +2,8 @@ package creational_test
 
 import (
 	"testing"
+
+	"github.com/SanjeevChoubey/go_design_patterns/tree/master/go_design_patterns/creational/singleton"
 )
 
 func TestGetInstance(t *testing.T) {

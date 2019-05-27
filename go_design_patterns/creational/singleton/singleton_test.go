@@ -2,30 +2,29 @@ package creational_test
 
 import (
 	"testing"
-
 )
 
 func TestGetInstance(t *testing.T) {
-	counter1 := GetInstance()
+	counter1 := singleton.GetInstance()
 	if counter1 == nil {
 		t.Error("Expected pointer after calling getInstance() is nil")
 	}
 	expectedcounter := counter1
 
-	currentcount := counter1.AddOne()
+	currentcount := counter1.singleton.AddOne()
 
 	if currentcount != 1 {
 		t.Errorf("After calling first time counter should be 1 but is is %d", currentcount)
 	}
 
 	// if user call again  the get instance he should get the same instance
-	counter2 := GetInstance()
+	counter2 := singleton.GetInstance()
 	if counter2 != expectedcounter {
 		t.Errorf("Expected same instance but got the different one")
 	}
 
 	// Check for count is increasing correctly with correct instance
-	currentcount = counter1.AddOne()
+	currentcount = counter1.singleton.AddOne()
 	if currentcount != 2 {
 		t.Errorf("Counter is not increamenting correctly, count should be 2 at this point")
 	}

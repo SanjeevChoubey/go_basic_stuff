@@ -30,20 +30,40 @@ func (l *list) push(value int) {
 func (l *list) first() *Node{
   return l.head
 }
+//Remove/pop an element
 func (l *list) pop(value int){
 
+  for n:= l.first(); n.Next() == nil;n.Next(){
+    if n.Next().value == value{
+      n.next = n.Next().Next()
+      break
+    }
+  }
 }
-func main(){
-  l := list{}
-  l.push(1)
-  l.push(5)
-  l.push(34)
+// Traverse through list
+func (l *list) traverse(){
   n := l.first()
- for {
+  for {
     fmt.Println(n.value)
     n = n.Next()
     if n ==  nil{
       break
     }
  }
+}
+
+func main(){
+  l := list{}
+  l.push(1)
+  l.push(5)
+  l.push(34)
+  l.push(44)
+  l.push(74)
+  l.push(77)
+  l.push(100)
+  l.traverse()
+  //Pop Elemnet
+  l.pop(77)
+  l.traverse()
+
 }

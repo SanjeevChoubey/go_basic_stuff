@@ -1,4 +1,4 @@
-package creational
+package creational_test
 
 import (
 	"testing"
@@ -7,7 +7,7 @@ import (
 )
 
 func TestGetInstance(t *testing.T) {
-	counter1 := singleton.GetInstance()
+	counter1 := GetInstance()
 	if counter1 == nil {
 		t.Error("Expected pointer after calling getInstance() is nil")
 	}

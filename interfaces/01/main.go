@@ -32,11 +32,11 @@ func calcArea(s shape) float64 {
 
 func main() {
 	s := square{10}
-	
+
 	fmt.Println(calcArea(s))
 
 	c := circle{25}
-	
+
 	fmt.Println(calcArea(c))
 
 }

@@ -1,7 +1,7 @@
-package server
+package main
 
 import (
-	"testgrpc/pb/message"
+	
 )
 
 var employees = []pb.Employee{

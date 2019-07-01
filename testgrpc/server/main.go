@@ -6,7 +6,7 @@ import (
 	"net"
 
 	"github.com/SanjeevChoubey/testgrpc/pb"
-	"github.com/SanjeevChoubey/testgrpc/testgrpc/pb"
+	
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
 )
@@ -26,13 +26,14 @@ func main() {
 
 	opts := []grpc.ServerOption{grpc.Creds(creds)}
 	s := grpc.NewServer(opts...)
-	pb.RegisterEmployeeServiceServer(s, new(employeeService))
+	//pb.RegisterEmployeeServiceServer(s, new(employeeService))
+	pb.RegisterEmployeeServiceServer(s, &employeeService{})
 	log.Println("Starting server on port:", port)
 	s.Serve(lis)
 }
 
 type employeeService struct{}
 
-func (e *employeeService) GetAllEmployees(ctx context.Context, in *EmployeeRequest, opts ...grpc.CallOption) (*EmployeeResponse, error) {
+func (e *employeeService) GetAllEmployees(ctx context.Context, in *pb.EmployeeRequest, opts ...grpc.CallOption) (*pb.EmployeeResponse, error) {
 	return nil, nil
 }

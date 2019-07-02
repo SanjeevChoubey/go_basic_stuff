@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"io"
 	"log"
 	"net"
 
@@ -24,6 +25,46 @@ func (s *server) Sum(ctx context.Context, req *pb.CalculatorRequest) (*pb.Calcul
 	}
 
 	return res, nil
+}
+
+func (s *server) PrimeNumberDecomposition(req *pb.PrimeRequest, stream pb.CalculatorService_PrimeNumberDecompositionServer) error {
+	n := req.GetNumber()
+	var k int32 = 2
+	for n > 1 {
+		if n%k == 0 {
+			stream.Send(&pb.PrimeResponse{
+				Result: k,
+			})
+			n = n / k
+		} else {
+			k++
+		}
+	}
+	return nil
+}
+
+func (s *server) ComputeAverage(stream pb.CalculatorService_ComputeAverageServer) error {
+	fmt.Println("In Compute average")
+	var total, count int32
+
+	for {
+		avgReq, err := stream.Recv()
+		if err == io.EOF {
+			avg := total / count
+			stream.SendAndClose(&pb.AvgResponse{
+				Result: avg,
+			})
+		}
+		if err != nil {
+			log.Fatalf("Error in server %v", err)
+		}
+
+		total += avgReq.GetNumber()
+		count++
+
+	}
+
+	return nil
 }
 
 func main() {

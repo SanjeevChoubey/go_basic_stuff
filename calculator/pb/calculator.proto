@@ -17,8 +17,32 @@ message CalculatorResponse{
     int32 result = 1;
 }
 
+message primeRequest{
+    int32 number = 1;
+}
+
+message primeResponse{
+    int32 result = 1;
+}
+
+message avgRequest{
+    int32 number = 1;
+}
+
+message avgResponse{
+    int32 result = 1;
+}
+
+
+
 service CalculatorService{
 
     // Sum 
     rpc Sum(CalculatorRequest) returns(CalculatorResponse){};
+
+    // Server Streaming
+    rpc PrimeNumberDecomposition(primeRequest) returns(stream primeResponse){};
+
+    //client Streaming
+    rpc ComputeAverage(stream avgRequest) returns(avgResponse){};
 }

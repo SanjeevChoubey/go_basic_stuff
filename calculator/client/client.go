@@ -28,9 +28,57 @@ func main() {
 	//doPrimeDecomposition(c)
 
 	// Average
-	doComputeAverage(c)
+	//doComputeAverage(c)
+
+	// Fins Maximum Number
+	doFindMax(c)
 
 }
+func doFindMax(c pb.CalculatorServiceClient) {
+	fmt.Println("In Find Maximum function")
+	
+	stream, err := c.FindMaximum(context.Background())
+	if err != nil{
+		log.Fatalf("Error while calling FindMaximum %v", err)
+	}
+	waitC := make(chan struct{})
+	// Send to server 
+	go func(){
+		requests := []int32{1,5,3,6,2,20}
+		for _,req := range requests{
+			stream.Send(&pb.FindMaxRequest{
+				Number : req,
+			})
+		}
+		stream.CloseSend()
+	}()
+	// Recieve 
+
+	go func (){
+		resAr := []int32{}
+		for{
+			res, err := stream.Recv()
+			if err == io.EOF{
+				break
+			}
+			if err != nil{
+				log.Fatalf("Error in recieving %v\n",err)
+				break
+			}
+			resAr = append(resAr,res.Result)
+		}
+
+		fmt.Println(resAr)
+		// when recieving is done the close the channel
+		close(waitC)
+	
+	}()
+
+	// Blocking till all response recieved
+	<-waitC
+}
+
+
 func doComputeAverage(c pb.CalculatorServiceClient) {
 	fmt.Println("In Compute Average- Client")
 	requests := []*pb.AvgRequest{

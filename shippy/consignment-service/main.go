@@ -5,7 +5,8 @@ import (
 	"log"
 	"sync"
 
-	pb "github.com/Sanjeevchoubey/Shippy/consignment-service/proto/consignment"
+	//pb "github.com/Sanjeevchoubey/Shippy/consignment-service/proto/consignment"
+	pb"github.com/SanjeevChoubey/go_basic_stuff/tree/Project/shippy/consignment-service/proto/consignment"
 	"github.com/micro/go-micro"
 )
 

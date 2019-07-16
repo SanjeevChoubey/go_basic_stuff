@@ -3,7 +3,7 @@ package main
 import (
 	context "context"
 	"log"
-	"sync"
+	"os"
 
 	pb "github.com/Sanjeevchoubey/Shippy/consignment-service/proto/consignment"
 	vesselProto "github.com/Sanjeevchoubey/Shippy/vessel-service/shippy-service-vessel/proto/vessel"
@@ -12,64 +12,65 @@ import (
 	"github.com/micro/go-micro"
 )
 
-type repository interface {
-	Create(*pb.Consignment) (*pb.Consignment, error)
-	GetAll() []*pb.Consignment
-}
+// type repository interface {
+// 	Create(*pb.Consignment) (*pb.Consignment, error)
+// 	GetAll() []*pb.Consignment
+// }
 
 // Dummy Repository latter part this will be removed when we will started using dB
-type Repository struct {
-	mu           sync.Mutex
-	consignments []*pb.Consignment
-}
+// type Repository struct {
+// 	mu           sync.Mutex
+// 	consignments []*pb.Consignment
+// }
 
-type service struct {
-	repo         repository
-	vesselClient vesselProto.VesselServiceClient
-}
+// type service struct {
+// 	repo         repository
+// 	vesselClient vesselProto.VesselServiceClient
+// }
 
-func (s *service) GetConsignments(ctx context.Context, req *pb.GetRequest, res *pb.Response) error {
-	res.Consignments = s.repo.GetAll()
-	return nil
-}
+// func (s *service) GetConsignments(ctx context.Context, req *pb.GetRequest, res *pb.Response) error {
+// 	res.Consignments = s.repo.GetAll()
+// 	return nil
+// }
 
-func (r *Repository) GetAll() []*pb.Consignment {
-	return r.consignments
-}
+// func (r *Repository) GetAll() []*pb.Consignment {
+// 	return r.consignments
+// }
 
 // this method will be handled by gRPC
-func (s *service) CreateConsignment(ctx context.Context, req *pb.Consignment, res *pb.Response) error {
-	// Check vessel id
-	vr, err := s.vesselClient.FindAvailable(context.Background(), &vesselProto.Specification{
-		MaxWeight: req.Weight,
-		Capacity:  int32(len(req.Containers)),
-	})
-	if err != nil {
-		return err
-	}
-	log.Println("found vessel", vr.Vessel.Name)
-	req.VesselId = vr.Vessel.Id
+// func (s *service) CreateConsignment(ctx context.Context, req *pb.Consignment, res *pb.Response) error {
+// 	// Check vessel id
+// 	vr, err := s.vesselClient.FindAvailable(context.Background(), &vesselProto.Specification{
+// 		MaxWeight: req.Weight,
+// 		Capacity:  int32(len(req.Containers)),
+// 	})
+// 	if err != nil {
+// 		return err
+// 	}
+// 	log.Println("found vessel", vr.Vessel.Name)
+// 	req.VesselId = vr.Vessel.Id
 
-	consignment, err := s.repo.Create(req)
-	if err != nil {
-		return err
-	}
-	res.Created = true
-	res.Consignment = consignment
-	return nil
+// 	consignment, err := s.repo.Create(req)
+// 	if err != nil {
+// 		return err
+// 	}
+// 	res.Created = true
+// 	res.Consignment = consignment
+// 	return nil
 
-}
+// }
 
-// Create a new consignment
-func (r *Repository) Create(req *pb.Consignment) (*pb.Consignment, error) {
-	r.mu.Lock()
-	r.consignments = append(r.consignments, req)
-	r.mu.Unlock()
-	return req, nil
-}
+// // Create a new consignment
+// func (r *Repository) Create(req *pb.Consignment) (*pb.Consignment, error) {
+// 	r.mu.Lock()
+// 	r.consignments = append(r.consignments, req)
+// 	r.mu.Unlock()
+// 	return req, nil
+// }
 
 const (
-	port = ":50051"
+	port        = ":50051"
+	defaultHost = "datastore:27017"
 )
 
 func main() {
@@ -97,14 +98,31 @@ func main() {
 
 	// }
 
-	// Using Go-Micro--------------------------------------------
+	//  Go-Micro Instance --------------------------------------------
 	srv := micro.NewService(
 		micro.Name("shippy.service.consignment"),
 	)
 	srv.Init()
 
+	uri := os.Getenv("DB_HOST")
+	if uri == " " {
+		uri = defaultHost
+	}
+	client, err := CreateClient(uri)
+	if err != nil {
+		log.Panic(err)
+	}
+	defer client.Disconnect(context.TODO())
+
+	consignmentCollection := client.Databse("shippy").Collecttion("consignments")
+
+	repository := &MongoRepository{consignmentCollection}
+
+
+
 	vesselClient := vesselProto.NewVesselServiceClient("shippy.service.vessel", srv.Client())
 
+	
 	pb.RegisterShippingServiceHandler(srv.Server(), &service{repo, vesselClient})
 
 	// Run the Server

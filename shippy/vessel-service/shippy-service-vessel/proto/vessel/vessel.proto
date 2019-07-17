@@ -22,4 +22,5 @@ message Response{
 
 service VesselService{
     rpc FindAvailable(Specification) returns(Response){}
+    rpc Create(Vessel) returns(Response){}
 }

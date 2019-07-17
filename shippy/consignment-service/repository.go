@@ -24,6 +24,9 @@ func (r *MongoRepository) Create(consignment *pb.Consignment) error {
 
 func (r *MongoRepository) GetAll() ([]*pb.Consignment, error) {
 	row, err := r.collection.Find(context.Background(), nil, nil)
+	if err != nil {
+		return nil, err
+	}
 	var consignments []*pb.Consignment
 	for row.Next(context.Background()) {
 		var consignment *pb.Consignment

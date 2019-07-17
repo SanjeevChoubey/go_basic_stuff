@@ -74,7 +74,7 @@ const (
 )
 
 func main() {
-	repo := &Repository{}
+	//repo := &Repository{}
 	//-grpc-----------------------------------------
 	// //Setup gRPC server
 	// lis, err := net.Listen("tcp", port)
@@ -114,16 +114,14 @@ func main() {
 	}
 	defer client.Disconnect(context.TODO())
 
-	consignmentCollection := client.Databse("shippy").Collecttion("consignments")
+	consignmentCollection := client.Database("shippy").Collection("consignments")
 
 	repository := &MongoRepository{consignmentCollection}
 
-
-
 	vesselClient := vesselProto.NewVesselServiceClient("shippy.service.vessel", srv.Client())
+	h := &Handler{repository, vesselClient}
 
-	
-	pb.RegisterShippingServiceHandler(srv.Server(), &service{repo, vesselClient})
+	pb.RegisterShippingServiceHandler(srv.Server(), h)
 
 	// Run the Server
 	log.Println("Running Servere at port :", port)

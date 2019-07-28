@@ -1,9 +1,9 @@
 package main
 
 import (
-
 	"log"
 	"os"
+
 	context "golang.org/x/net/context"
 
 	pb "github.com/Sanjeevchoubey/Shippy/vessel-service/shippy-service-vessel/proto/vessel"
@@ -40,7 +40,7 @@ type Service struct {
 // 	return nil
 // }
 const (
-	defaultHost = "datastore:27017"
+	defaultHost = "mongodb://localhost:27017"
 )
 
 func main() {
@@ -56,21 +56,21 @@ func main() {
 	srv.Init()
 
 	uri := os.Getenv("DB_HOST")
-	if uri == " "{
+	if uri == "" {
 		uri = defaultHost
 	}
 
-client, err := CreateClient(uri)
-if err != nil{
-	log.Panic(err)
-}
-defer client.Disconnect(context.TODO())
+	client, err := CreateClient(uri)
+	if err != nil {
+		log.Panic(err)
+	}
+	defer client.Disconnect(context.TODO())
 
-vesselCollection := client.Database("shippy").Collection("vessel")
+	vesselCollection := client.Database("shippy").Collection("vessel")
 
-repository := &VesselRepository{
-	vesselCollection,
-}
+	repository := &VesselRepository{
+		vesselCollection,
+	}
 
 	pb.RegisterVesselServiceHandler(srv.Server(), &handler{repository})
 

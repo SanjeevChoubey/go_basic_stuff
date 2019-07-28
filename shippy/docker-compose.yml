@@ -7,10 +7,10 @@ services:
     environment:
       MICRO_REGISTRY: "mdns"
 
-  user-cli:
-    build: ./user-cli
-    environment:
-      MICRO_REGISTRY: "mdns"
+  # user-cli:
+  #   build: ./user-cli
+  #   environment:
+  #     MICRO_REGISTRY: "mdns"
 
   consignment-service:
     build: ./consignment-service

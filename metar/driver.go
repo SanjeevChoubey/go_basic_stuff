@@ -8,6 +8,7 @@ import (
 	"github.com/lib/pq"
 )
 
+// Error function
 func logFatal(err error) {
 	if err != nil {
 		log.Fatalln(err)

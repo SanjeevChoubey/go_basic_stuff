@@ -12,6 +12,7 @@ import (
 	"strings"
 )
 
+// This method will be called for each new request from CLI
 func (c *Client) NewRequest(db *sql.DB) error {
 
 	client := &http.Client{}

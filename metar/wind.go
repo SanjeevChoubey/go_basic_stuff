@@ -25,7 +25,7 @@ func init() {
 }
 
 func (r *Report) IsWindSucks(raw string) bool {
-
+	// if no wind them its calm
 	if strings.Contains(raw, "00000KT") {
 		r.wind.IsCalm = true
 	} else {

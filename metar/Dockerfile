@@ -18,4 +18,4 @@ WORKDIR /app
 COPY --from=builder /go/src/github.com/SanjeevChoubey/Metar .
 
 
-CMD metar 
+CMD metar

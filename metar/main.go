@@ -14,20 +14,18 @@ func init() {
 }
 
 func main() {
-	
+
 	// Create Data base connection
 	db = ConnectDB()
-	
+
 	// Set info for CLI
 	Info()
 
 	// Set Commands & run Commands
 	Commands()
 
-
-	// run 
+	// run CLI
 	err := app.Run(os.Args)
 	logFatal(err)
 
-	
 }

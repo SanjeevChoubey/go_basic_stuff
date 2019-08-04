@@ -24,7 +24,7 @@ func (r *Report) ParseWeather(raw string) bool {
 
 	matches := weatherRe.FindAllStringSubmatch(raw, -1)
 
-	// Keep in array for allweather report
+	// Keep in array for all weather report
 	for _, match := range matches {
 		for _, n := range meterCodes {
 			if match[0] == n {

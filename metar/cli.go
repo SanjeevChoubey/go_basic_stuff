@@ -10,7 +10,7 @@ import (
 
 var app = cli.NewApp()
 
-//CLI Info
+//CLI Information
 func Info() {
 	app.Name = "get_metar"
 	app.Usage = "You can get wether report for any airport"

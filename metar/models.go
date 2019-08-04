@@ -23,4 +23,3 @@ type Wind struct {
 	Speed  string
 	Gust   string
 }
-
